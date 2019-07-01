@@ -651,7 +651,7 @@ lm_copy_file () {
 		
 		lm_max_argument "${3}"  || lm_failure
 		
-#		echo "cp -v ${FILE} ${NEW_NAME}"
+		#echo "cp -v ${FILE} ${NEW_NAME}"
 		cp -v "${FILE}" "${NEW_NAME}"  || lm_failure
 	)
 }
