@@ -78,7 +78,7 @@
 
 unset LM_FUNCTIONS_VER LM_FUNCTIONS_DATE LM_FUNCTIONS_LOADED
 LM_FUNCTIONS_LOADED=false
-LM_FUNCTIONS_VER="1.2.0"
+LM_FUNCTIONS_VER="1.2.1"
 LM_FUNCTIONS_DATE="2019-07-09"
 #echo "LM functions version: ${LM_FUNCTIONS_VER} (${LM_FUNCTIONS_DATE})"
 
@@ -692,8 +692,10 @@ lm_get_app_version () {
 		APP="$(lm_verify_argument "${1}")"  || lm_failure
 		
 		lm_max_argument "${2}"  || lm_failure
-		
-		$(${APP} --version)  2>/dev/null  || {
+		#>&2 echo ${APP}
+		EVAL_THIS="${APP} --version"
+		#$(${APP} --version  2>/dev/null)  || {
+		eval ${EVAL_THIS}  2>/dev/null  || {
 			#lm_failure
 			
 			# NOTE: No need to fail the script. Just return empty.
