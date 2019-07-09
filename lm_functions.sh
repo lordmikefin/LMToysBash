@@ -77,7 +77,7 @@
 
 unset LM_FUNCTIONS_VER LM_FUNCTIONS_DATE LM_FUNCTIONS_LOADED
 LM_FUNCTIONS_LOADED=false
-LM_FUNCTIONS_VER="1.1.0"
+LM_FUNCTIONS_VER="1.1.1"
 LM_FUNCTIONS_DATE="2019-07-09"
 #echo "LM functions version: ${LM_FUNCTIONS_VER} (${LM_FUNCTIONS_DATE})"
 
@@ -659,6 +659,7 @@ lm_copy_file () {
 
 lm_get_git_version () {
 	# Print git version.
+	# Will print empty if 'git' aplication is not available
 	
 	# NOTE: Do not echo enything into stdout! All stdout echoes are used as return value.
 	
@@ -668,7 +669,12 @@ lm_get_git_version () {
 	( # subshell
 		lm_max_argument "${1}"  || lm_failure
 		
-		git --version  2>/dev/null  || lm_failure
+		git --version  2>/dev/null  || {
+			#lm_failure
+			
+			# NOTE: No need to fail the script. Just return empty.
+			echo ""
+		}
 	)
 }
 
