@@ -70,14 +70,15 @@
 #  - lm_add_time_stamp_to_file ()
 #  - lm_rename_file ()
 #  - lm_copy_file ()
+#  - lm_get_git_version () {
 
 
 
 
 unset LM_FUNCTIONS_VER LM_FUNCTIONS_DATE LM_FUNCTIONS_LOADED
 LM_FUNCTIONS_LOADED=false
-LM_FUNCTIONS_VER="1.0.0"
-LM_FUNCTIONS_DATE="2019-06-30"
+LM_FUNCTIONS_VER="1.1.0"
+LM_FUNCTIONS_DATE="2019-07-09"
 #echo "LM functions version: ${LM_FUNCTIONS_VER} (${LM_FUNCTIONS_DATE})"
 
 
@@ -653,6 +654,21 @@ lm_copy_file () {
 		
 		#echo "cp -v ${FILE} ${NEW_NAME}"
 		cp -v "${FILE}" "${NEW_NAME}"  || lm_failure
+	)
+}
+
+lm_get_git_version () {
+	# Print git version.
+	
+	# NOTE: Do not echo enything into stdout! All stdout echoes are used as return value.
+	
+	# Usage:
+	#   GIT_VERSION=$(lm_get_git_version)  || lm_failure
+	
+	( # subshell
+		lm_max_argument "${1}"  || lm_failure
+		
+		git --version  2>/dev/null  || lm_failure
 	)
 }
 
