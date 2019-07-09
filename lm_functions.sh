@@ -71,13 +71,14 @@
 #  - lm_rename_file ()
 #  - lm_copy_file ()
 #  - lm_get_git_version () {
+#  - lm_get_app_version ()
 
 
 
 
 unset LM_FUNCTIONS_VER LM_FUNCTIONS_DATE LM_FUNCTIONS_LOADED
 LM_FUNCTIONS_LOADED=false
-LM_FUNCTIONS_VER="1.1.1"
+LM_FUNCTIONS_VER="1.2.0"
 LM_FUNCTIONS_DATE="2019-07-09"
 #echo "LM functions version: ${LM_FUNCTIONS_VER} (${LM_FUNCTIONS_DATE})"
 
@@ -670,6 +671,29 @@ lm_get_git_version () {
 		lm_max_argument "${1}"  || lm_failure
 		
 		git --version  2>/dev/null  || {
+			#lm_failure
+			
+			# NOTE: No need to fail the script. Just return empty.
+			echo ""
+		}
+	)
+}
+
+lm_get_app_version () {
+	# Print APP version.
+	# Will print empty, if aplication is not available.
+	
+	# NOTE: Do not echo enything into stdout! All stdout echoes are used as return value.
+	
+	# Usage:
+	#   GIT_VERSION=$(lm_get_app_version git)  || lm_failure
+	
+	( # subshell
+		APP="$(lm_verify_argument "${1}")"  || lm_failure
+		
+		lm_max_argument "${2}"  || lm_failure
+		
+		$(${APP} --version)  2>/dev/null  || {
 			#lm_failure
 			
 			# NOTE: No need to fail the script. Just return empty.
