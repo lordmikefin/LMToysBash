@@ -28,7 +28,7 @@
 # ----------------------------------------------------------------------------
 #	CURRENT_SCRIPT_REALPATH=$(realpath ${BASH_SOURCE[0]})
 #	CURRENT_SCRIPT_DIR=$(dirname ${CURRENT_SCRIPT_REALPATH})
-#   LM_TOYS_DIR=/path/of/this/module
+#   LM_TOYS_DIR=$(realpath "${CURRENT_SCRIPT_DIR}/path/of/submodule/LMToysBash")
 #	#IMPORT_FUNCTIONS="$(realpath "${CURRENT_SCRIPT_DIR}/../../script/lm_functions.sh")"
 #	IMPORT_FUNCTIONS=$(realpath "${LM_TOYS_DIR}/lm_functions.sh")
 #	if [[ ! -f "${IMPORT_FUNCTIONS}" ]]; then
