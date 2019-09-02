@@ -70,16 +70,17 @@
 #  - lm_add_time_stamp_to_file ()
 #  - lm_rename_file ()
 #  - lm_copy_file ()
-#  - lm_get_git_version () {
+#  - lm_get_git_version ()
 #  - lm_get_app_version ()
+#  - lm_pause ()
 
 
 
 
 unset LM_FUNCTIONS_VER LM_FUNCTIONS_DATE LM_FUNCTIONS_LOADED
 LM_FUNCTIONS_LOADED=false
-LM_FUNCTIONS_VER="1.2.1"
-LM_FUNCTIONS_DATE="2019-07-09"
+LM_FUNCTIONS_VER="1.2.2"
+LM_FUNCTIONS_DATE="2019-09-02"
 #echo "LM functions version: ${LM_FUNCTIONS_VER} (${LM_FUNCTIONS_DATE})"
 
 
@@ -704,6 +705,16 @@ lm_get_app_version () {
 	)
 }
 
+lm_pause () {
+	# Implements good old DOS 'pause' command for Bash ;)
+	
+	# Usage:
+	#   pause
+	
+	( # subshell
+		read -p "Press [Enter] key to start backup..."
+	)
+}
 
 #echo ""
 #echo "Functions loaded from: '${LM_FUNCTIONS}'"
