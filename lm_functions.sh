@@ -712,7 +712,7 @@ lm_pause () {
 	#   pause
 	
 	( # subshell
-		read -p "Press [Enter] key to start backup..."
+		read -p "Press [Enter] key to continue..."
 	)
 }
 
