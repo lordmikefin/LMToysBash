@@ -79,8 +79,8 @@
 
 unset LM_FUNCTIONS_VER LM_FUNCTIONS_DATE LM_FUNCTIONS_LOADED
 LM_FUNCTIONS_LOADED=false
-LM_FUNCTIONS_VER="1.2.2"
-LM_FUNCTIONS_DATE="2019-09-02"
+LM_FUNCTIONS_VER="1.3.0"
+LM_FUNCTIONS_DATE="2020-11-08"
 #echo "LM functions version: ${LM_FUNCTIONS_VER} (${LM_FUNCTIONS_DATE})"
 
 
@@ -125,17 +125,18 @@ unset INCORRECT_VERSION
 # Check Bash version.
 TESTED_BASH_VERSION=(4 3 46)
 INCORRECT_VERSION=false
-if [[ "${BASH_VERSINFO[0]}" -lt  "${TESTED_BASH_VERSION[0]}"  ]] ; then
-	INCORRECT_VERSION=true
-else
-	if [[ "${BASH_VERSINFO[1]}" -lt  "${TESTED_BASH_VERSION[1]}"  ]] ; then
-		INCORRECT_VERSION=true
-	else
-		if [[ "${BASH_VERSINFO[2]}" -lt  "${TESTED_BASH_VERSION[2]}"  ]] ; then
-			INCORRECT_VERSION=true
-		fi
-	fi
-fi
+# TODO: fix bash version check
+#if [[ "${BASH_VERSINFO[0]}" -lt  "${TESTED_BASH_VERSION[0]}"  ]] ; then
+#	INCORRECT_VERSION=true
+#else
+#	if [[ "${BASH_VERSINFO[1]}" -lt  "${TESTED_BASH_VERSION[1]}"  ]] ; then
+#		INCORRECT_VERSION=true
+#	else
+#		if [[ "${BASH_VERSINFO[2]}" -lt  "${TESTED_BASH_VERSION[2]}"  ]] ; then
+#			INCORRECT_VERSION=true
+#		fi
+#	fi
+#fi
 
 #echo "INCORRECT_VERSION : ${INCORRECT_VERSION}"
 if [ "${INCORRECT_VERSION}" == true ] ; then
