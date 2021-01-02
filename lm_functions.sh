@@ -59,6 +59,7 @@
 #  - lm_functions_incorrect_version ()
 #  - lm_read_to_INPUT ()
 #  - lm_check_KVM_WORKSPACE ()
+#  - lm_select_gpu_GPU_BUS_and_GPU_SOUND () {
 # :Functions with subshell:
 #  - lm_verify_argument ()
 #  - lm_max_argument ()
@@ -79,8 +80,8 @@
 
 unset LM_FUNCTIONS_VER LM_FUNCTIONS_DATE LM_FUNCTIONS_LOADED
 LM_FUNCTIONS_LOADED=false
-LM_FUNCTIONS_VER="1.3.0"
-LM_FUNCTIONS_DATE="2020-11-08"
+LM_FUNCTIONS_VER="1.3.1"
+LM_FUNCTIONS_DATE="2021-01-02"
 #echo "LM functions version: ${LM_FUNCTIONS_VER} (${LM_FUNCTIONS_DATE})"
 
 
@@ -304,6 +305,117 @@ lm_check_KVM_WORKSPACE () {
 		>&2 echo -e "\n Variable 'KVM_WORKSPACE' not set.  Aborting."
 		exit 1
 	fi
+}
+
+lm_select_gpu_GPU_BUS_and_GPU_SOUND () {
+	# List GPUs from the file.
+	# User can select GPU from the list.
+	
+	# WARNING: 
+	#   This fuction will over write variables GPU_BUS, GPU_SOUND and SELECTED !!!
+	
+	# Usage:
+	#	unset GPU_BUS GPU_SOUND SELECTED
+	#	lm_select_gpu_GPU_BUS_and_GPU_SOUND "/path/to/vm_GPUs.conf"  || lm_failure
+	
+	VM_GPUS_CONF_FILE="$(lm_verify_argument "${1}")"  || lm_failure
+	
+	lm_max_argument "${2}"  || lm_failure
+	
+    if [[ ! -f "${VM_GPUS_CONF_FILE}" ]]; then
+	    # >&2 echo "${BASH_SOURCE[0]}: line ${LINENO}: Source script '${IMPORT_FUNCTIONS}' missing!"
+	    lm_failure_message "${BASH_SOURCE[0]}" "${LINENO}" "Config file '${VM_GPUS_CONF_FILE}' missing!"
+	    exit 1
+    fi
+
+    #echo ""
+    #echo "VM_GPUS_CONF_FILE : ${VM_GPUS_CONF_FILE}"
+    #echo ""
+    #echo "$(cat "${VM_GPUS_CONF_FILE}")"
+    #echo "length : ${#VM_GPUS_CONF_FILE}"
+    #echo ""
+
+
+    echo ""
+    echo "Select card to use with the vm."
+    echo ""
+    
+    # NOTE: Read more about arrays
+    #   https://stackoverflow.com/questions/8880603/loop-through-an-array-of-strings-in-bash
+    
+    BACKUP_IFS="${IFS}"
+    IFS=$'\n'
+    COUNT=0
+    COUNT_DEV=0
+    SELECTIONS_STR="0,"
+    SELECTIONS=(" #0	NONE") # Declare array
+    PCI_BUS_VGA=() # Declare array
+    PCI_BUS_AUDIO=() # Declare array
+    #echo "LINE ${COUNT} : ${LINE}"
+    for LINE in $(cat "${VM_GPUS_CONF_FILE}") ; do
+	    let COUNT=COUNT+1
+	    if [ ${COUNT} == 1 ]; then
+		    SELECTIONS+=(${LINE}) # Append to array
+	    elif [ ${COUNT} == 2 ]; then
+		    PCI_BUS_VGA+=(${LINE}) # Append to array
+	    elif [ ${COUNT} == 3 ]; then
+		    PCI_BUS_AUDIO+=(${LINE}) # Append to array
+		    COUNT=0
+		    let COUNT_DEV=COUNT_DEV+1
+		    SELECTIONS_STR+="${COUNT_DEV},"
+	    fi
+    done
+
+    IFS="${BACKUP_IFS}"
+    
+    #echo ""
+    #echo "SELECTIONS : ${SELECTIONS[@]}"
+    #echo ""
+    #echo "PCI_BUS_VGA : ${PCI_BUS_VGA[@]}"
+    #echo "PCI_BUS_AUDIO : ${PCI_BUS_AUDIO[@]}"
+    #echo "SELECTIONS_STR : ${SELECTIONS_STR}"
+    #echo ""
+
+    unset SELECTED
+    unset INPUT
+    for LINE in "${SELECTIONS[@]}" ; do
+	    echo " ${LINE}"
+    done
+    while [[ -z ${INPUT} ]]; do
+	    
+	    echo -n "Select one device: "
+	    read INPUT
+	    
+	    STRING_LOW_CASE="$(lm_string_to_lower_case "${INPUT}")"  || { STRING_LOW_CASE="FAILED";  lm_failure_message; }
+
+	    if [[ -z ${INPUT} ]]; then
+		    INPUT="N/A"
+	    fi
+	    
+	    if [[ ${SELECTIONS_STR} == *"${STRING_LOW_CASE},"* ]]; then
+		    echo "FOUND"
+		    SELECTED=${STRING_LOW_CASE}
+	    else
+		    unset INPUT  # Clear input ( = stay in while loop )
+	    fi
+    done
+    
+    echo ""
+    echo "SELECTED : ${SELECTED}"
+    
+    # Host device bus address
+    #GPU_BUS="01:00.0" # Nvidia GeForce GTX 1050 # ASUSTeK Computer Inc. Device
+    #GPU_SOUND="01:00.1"
+    #GPU_BUS="02:00.0" # Nvidia GeForce GT 710 # Micro-Star International Co., Ltd. [MSI] Device
+    #GPU_SOUND="02:00.1"
+    SEL=$((${SELECTED}-1))
+    if [[ $((${SELECTED})) -gt 0 ]]; then
+	    GPU_BUS="${PCI_BUS_VGA[${SEL}]}"
+	    GPU_SOUND="${PCI_BUS_AUDIO[${SEL}]}"
+	    echo ""
+	    echo "PCI_BUS_VGA : ${GPU_BUS}"
+	    echo "PCI_BUS_AUDIO : ${GPU_SOUND}"
+    fi
 }
 
 
