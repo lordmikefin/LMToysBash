@@ -73,6 +73,7 @@
 #  - lm_copy_file ()
 #  - lm_get_git_version ()
 #  - lm_get_app_version ()
+#  - lm_get_java_version ()
 #  - lm_pause ()
 
 
@@ -80,8 +81,8 @@
 
 unset LM_FUNCTIONS_VER LM_FUNCTIONS_DATE LM_FUNCTIONS_LOADED
 LM_FUNCTIONS_LOADED=false
-LM_FUNCTIONS_VER="1.3.1"
-LM_FUNCTIONS_DATE="2021-01-02"
+LM_FUNCTIONS_VER="1.3.2"
+LM_FUNCTIONS_DATE="2021-01-25"
 #echo "LM functions version: ${LM_FUNCTIONS_VER} (${LM_FUNCTIONS_DATE})"
 
 
@@ -814,6 +815,25 @@ lm_get_app_version () {
 			
 			# NOTE: No need to fail the script. Just return empty.
 			echo ""
+		}
+	)
+}
+
+lm_get_java_version () {
+	# Print APP version.
+	# Will print empty, if java is not available.
+	
+	# NOTE: Do not echo enything into stdout! All stdout echoes are used as return value.
+	
+	# Usage:
+	#   JAVA_VERSION=$(lm_get_java_version)  || lm_failure
+	
+	( # subshell
+		lm_max_argument "${1}"  || lm_failure
+		eval java -version  2>/dev/null  || {
+			echo "Failed"
+		} && {
+		    echo ""
 		}
 	)
 }
