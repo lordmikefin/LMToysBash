@@ -83,7 +83,7 @@
 
 unset LM_FUNCTIONS_VER LM_FUNCTIONS_DATE LM_FUNCTIONS_LOADED
 LM_FUNCTIONS_LOADED=false
-LM_FUNCTIONS_VER="1.3.3"
+LM_FUNCTIONS_VER="1.3.4"
 LM_FUNCTIONS_DATE="2021-02-13"
 #echo "LM functions version: ${LM_FUNCTIONS_VER} (${LM_FUNCTIONS_DATE})"
 
@@ -879,13 +879,18 @@ lm_generate_mac_address () {
 	#   MACADDRESS="$(lm_generate_mac_address)"  || lm_failure
 	
 	( # subshell
-	    HEX1="$(lm_generate_two_hex_num)"
-	    HEX2="$(lm_generate_two_hex_num)"
-	    HEX3="$(lm_generate_two_hex_num)"
-	    HEX4="$(lm_generate_two_hex_num)"
+	    #HEX1="$(lm_generate_two_hex_num)"
+	    #HEX2="$(lm_generate_two_hex_num)"
+	    #HEX3="$(lm_generate_two_hex_num)"
+	    #HEX4="$(lm_generate_two_hex_num)"
 	    HEX5="$(lm_generate_two_hex_num)"
 	    HEX6="$(lm_generate_two_hex_num)"
-		MAC="${HEX1}:${HEX2}:${HEX3}:${HEX4}:${HEX5}:${HEX6}"
+	    
+	    # NOTE: Looks like all mac addresses are not allowed ???
+	    # TODO: Find out why is not all mac addresses allowed.
+	    
+		#MAC="${HEX1}:${HEX2}:${HEX3}:${HEX4}:${HEX5}:${HEX6}"
+		MAC="DE:AD:BE:EF:${HEX5}:${HEX6}"
 		
 		echo "${MAC}"
 	)
