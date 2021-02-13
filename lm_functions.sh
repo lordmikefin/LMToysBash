@@ -75,14 +75,16 @@
 #  - lm_get_app_version ()
 #  - lm_get_java_version ()
 #  - lm_pause ()
+#  - lm_generate_two_hex_num ()
+#  - lm_generate_mac_address ()
 
 
 
 
 unset LM_FUNCTIONS_VER LM_FUNCTIONS_DATE LM_FUNCTIONS_LOADED
 LM_FUNCTIONS_LOADED=false
-LM_FUNCTIONS_VER="1.3.2"
-LM_FUNCTIONS_DATE="2021-01-25"
+LM_FUNCTIONS_VER="1.3.3"
+LM_FUNCTIONS_DATE="2021-02-13"
 #echo "LM functions version: ${LM_FUNCTIONS_VER} (${LM_FUNCTIONS_DATE})"
 
 
@@ -846,6 +848,46 @@ lm_pause () {
 	
 	( # subshell
 		read -p "Press [Enter] key to continue..."
+	)
+}
+
+lm_generate_two_hex_num () {
+	# Generate two hexadecimal numbers.
+	
+	# NOTE: Do not echo enything into stdout! All stdout echoes are used as return value.
+	
+	# Usage:
+	#   RAND_HEX="$(lm_generate_two_hex_num)"  || lm_failure
+	
+	( # subshell
+		HEX=$(printf '%02X' $((RANDOM%256)))
+		
+		echo "${HEX}"
+	)
+}
+
+lm_generate_mac_address () {
+	# Generate a MAC address.
+	# Define different mac address for each vm.
+	# Otherwise all vms are using the default one.
+	
+	# https://www.linux-kvm.org/page/Networking
+	
+	# NOTE: Do not echo enything into stdout! All stdout echoes are used as return value.
+	
+	# Usage:
+	#   MACADDRESS="$(lm_generate_mac_address)"  || lm_failure
+	
+	( # subshell
+	    HEX1="$(lm_generate_two_hex_num)"
+	    HEX2="$(lm_generate_two_hex_num)"
+	    HEX3="$(lm_generate_two_hex_num)"
+	    HEX4="$(lm_generate_two_hex_num)"
+	    HEX5="$(lm_generate_two_hex_num)"
+	    HEX6="$(lm_generate_two_hex_num)"
+		MAC="${HEX1}:${HEX2}:${HEX3}:${HEX4}:${HEX5}:${HEX6}"
+		
+		echo "${MAC}"
 	)
 }
 
