@@ -116,6 +116,9 @@ case "${OS_NAME}" in
 	"Linux" )
 		# Linux is OK
 		;;
+	"FreeBSD" )
+		# FreeBSD is OK
+		;;
 	* )
 		>&2 echo -e ""
 		>&2 echo -e "Current OS name: ${OS_NAME}"
@@ -124,8 +127,8 @@ case "${OS_NAME}" in
 esac
 
 
-echo "This script is in test mode :)  Aborting." >&2
-exit 1 # 127
+#echo "This script is in test mode :)  Aborting." >&2
+#exit 1 # 127
 
 
 CURRENT_SHELL="$(basename $SHELL)"
