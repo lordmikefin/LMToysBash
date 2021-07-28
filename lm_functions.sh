@@ -83,8 +83,8 @@
 
 unset LM_FUNCTIONS_VER LM_FUNCTIONS_DATE LM_FUNCTIONS_LOADED
 LM_FUNCTIONS_LOADED=false
-LM_FUNCTIONS_VER="1.3.4"
-LM_FUNCTIONS_DATE="2021-02-13"
+LM_FUNCTIONS_VER="1.3.5"
+LM_FUNCTIONS_DATE="2021-07-28"
 #echo "LM functions version: ${LM_FUNCTIONS_VER} (${LM_FUNCTIONS_DATE})"
 
 
@@ -113,7 +113,8 @@ OS_NAME="$(uname)"
 OS_VER="$(uname -r)"
 OS_ARCH="$(uname -m)"
 if [[ ${OS_NAME} != "Linux" ]] ; then
-	>&2 echo -e "\n System is not Linux. This script is tested only with Linux.  Aborting."
+	>&2 echo -e "\n Current OS name: ${OS_NAME}"
+	>&2 echo -e " System is not Linux. This script is tested only with Linux.  Aborting."
 	exit 1
 fi
 
